@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>Springmvc</display-name>   <!-- "http://localhost:8080/Springmvc/" -->
+  <welcome-file-list> 	
+	    <welcome-file>index.html</welcome-file>
+	    <welcome-file>index.jsp</welcome-file>
+	    <welcome-file>index.htm</welcome-file>
+	    <welcome-file>default.html</welcome-file>
+	    <welcome-file>default.jsp</welcome-file>
+	    <welcome-file>default.htm</welcome-file>
+  </welcome-file-list>
+
+    <!-- 部署 DispatcherServlet -->
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class> <!-- 透過 dispatcherServlet 控制 -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <!-- 未來的網址路徑只要是 mvc 開頭以下的都要被控管 -->
+        <!-- 假如把 mvc 拿掉: /* 就會是全網被控制 -> 這就是要看公司  -->
+        <!-- 假如是 report/* 就不會受 Spring 的控制, 也就是寫傳統 web 的控制-->
+        <!-- 這就是為甚麼我們網址前面必須是 "http://localhost:8080/Springmvc/" 這是受控的, Spring 是上面的 display name -->
+        <url-pattern>/mvc/*</url-pattern> 
+    </servlet-mapping>
+  
+  <!-- 中文支援 (要放在過濾器配置的第一行) -->
+    <filter>
+        <filter-name>springUtf8Encoding</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>springUtf8Encoding</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!-- 配置 HiddenHttpMethodFilter -->
+    <filter>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <url-pattern>/mvc/*</url-pattern>
+    </filter-mapping>
+  
+</web-app>
+<!-- web.xml 配置 web 資料(URL) -->
